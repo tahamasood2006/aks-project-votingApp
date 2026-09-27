@@ -16,8 +16,8 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+pool:
+  name: 'azureagent'
 
 stages:
 
@@ -28,8 +28,7 @@ stages:
 
   - job: Buildforresult
     displayName: Buildforresult
-    pool:
-      vmImage: $(vmImageName)
+
 
     steps:
     - task: Docker@2
