@@ -51,8 +51,7 @@ stages:
 
   - job: PushtoContainerRegistryforresult
     displayName: PushtoContainerRegistryforresult
-    pool:
-      vmImage: $(vmImageName)
+
 
     steps:
     - task: Docker@2
