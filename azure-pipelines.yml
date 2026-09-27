@@ -3,7 +3,7 @@
 trigger:
   paths:
     include:
-      - voting/*
+      - vote/*
 
 resources:
 - repo: self
@@ -11,7 +11,7 @@ resources:
 variables:
  
   dockerRegistryServiceConnection: '700d9717-406a-49b7-a070-35c833f14d2e'
-  imageRepository: 'votingimage'
+  imageRepository: 'voteimage'
   containerRegistry: 'votingregistry.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/voting/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -39,7 +39,7 @@ stages:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
         command: 'build'
-        Dockerfile: 'voting/Dockerfile'
+        Dockerfile: 'vote/Dockerfile'
         tags: '$(tag)'
 
 # ---X-----X
