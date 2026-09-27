@@ -1,0 +1,67 @@
+# Docker
+
+trigger:
+  paths:
+    include:
+      - worker/*
+
+resources:
+- repo: self
+
+variables:
+ 
+  dockerRegistryServiceConnection: '700d9717-406a-49b7-a070-35c833f14d2e'
+  imageRepository: 'workerimage'
+  containerRegistry: 'votingregistry.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/voting/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  name: 'azureagent'
+
+stages:
+
+- stage: Build
+  displayName: Build 
+
+  jobs:
+
+  - job: Buildforworker
+    displayName: Buildforworker
+
+
+    steps:
+    - task: Docker@2
+
+      displayName: Build the image for worker microservice
+     
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: 'worker/Dockerfile'
+        tags: '$(tag)'
+
+# ---X-----X
+
+- stage: PushtoContainerRegistryforWorker
+  displayName: PushtoContainerRegistryforWorker
+
+  jobs:
+
+  - job: PushtoContainerRegistryforWorker
+    displayName: PushtoContainerRegistryforWorker
+
+
+    steps:
+    - task: Docker@2
+
+      displayName: Push the image for worker microservice
+     
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'push'
+        tags: '$(tag)'
+
+
