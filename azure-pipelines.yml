@@ -65,3 +65,21 @@ stages:
         tags: '$(tag)'
 
 
+# votingregistry.azurecr.io/workerimage:15
+
+
+- stage: UpdateManifestsforVoting
+  displayName: UpdateManifestsforVoting
+
+  jobs:
+
+  - job: UpdateManifestsforVoting
+    displayName: UpdateManifestsforVoting
+
+
+    steps:
+    - task: ShellScript@2
+
+      inputs:
+        scriptPath: 'scripts/manifestupdatescript.sh'
+        args: 'vote $imageRepository $tag'
