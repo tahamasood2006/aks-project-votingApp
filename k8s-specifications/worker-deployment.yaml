@@ -17,3 +17,5 @@ spec:
       containers:
       - image: votingRegistry/workerimage:15
         name: worker
+      imagePullSecrets:
+      - name: acr-secret
