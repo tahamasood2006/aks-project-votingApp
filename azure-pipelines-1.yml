@@ -1,3 +1,4 @@
+
 # Docker
 
 trigger:
@@ -9,9 +10,9 @@ resources:
 - repo: self
 
 variables:
- 
+
   dockerRegistryServiceConnection: '700d9717-406a-49b7-a070-35c833f14d2e'
-  imageRepository: 'workerimage'
+  imageRepository: 'worker'
   containerRegistry: 'votingregistry.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -21,20 +22,20 @@ pool:
 
 stages:
 
+
 - stage: Build
-  displayName: Build 
+  displayName: Build
 
   jobs:
 
   - job: Buildforworker
     displayName: Buildforworker
 
-
     steps:
-    - task: Docker@2
 
+    - task: Docker@2
       displayName: Build the image for worker microservice
-     
+
       inputs:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
@@ -42,22 +43,22 @@ stages:
         Dockerfile: 'worker/Dockerfile'
         tags: '$(tag)'
 
-# ---X-----X
 
-- stage: PushtoContainerRegistryforWorker
-  displayName: PushtoContainerRegistryforWorker
+
+
+- stage: PushtoContainerRegistryforworker
+  displayName: PushtoContainerRegistryforworker
 
   jobs:
 
-  - job: PushtoContainerRegistryforWorker
-    displayName: PushtoContainerRegistryforWorker
-
+  - job: PushtoContainerRegistryforworker
+    displayName: PushtoContainerRegistryforworker
 
     steps:
-    - task: Docker@2
 
+    - task: Docker@2
       displayName: Push the image for worker microservice
-     
+
       inputs:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
@@ -65,20 +66,30 @@ stages:
         tags: '$(tag)'
 
 
-# ---
 
-- stage: UpdateManifestsforWorker
-  displayName:  UpdateManifestsforWorker
+- stage: UpdateManifestsforworker
+  displayName: UpdateManifestsforworker
 
   jobs:
 
-  - job:  UpdateManifestsforWorker
-    displayName:  UpdateManifestsforWorker
-
+  - job: UpdateManifestsforworker
+    displayName: UpdateManifestsforworker
 
     steps:
+
+    # Checkout repository
+    - checkout: self
+      persistCredentials: true
+
+    # Run shell script
     - task: ShellScript@2
+      displayName: Update Voting Kubernetes Manifest
 
       inputs:
-        scriptPath: 'scripts/manifestupdatescript.sh'
-        args: 'worker $imageRepository $tag'
+        scriptPath: 'scripts/mainupdatemanifestscript.sh'
+        args: 'vote $(imageRepository) $(tag)'
+
+      env:
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+
