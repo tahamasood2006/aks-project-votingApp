@@ -65,3 +65,20 @@ stages:
         tags: '$(tag)'
 
 
+#---
+
+- stage: UpdateManifestsforResult
+  displayName:  UpdateManifestsforResult
+
+  jobs:
+
+  - job:  UpdateManifestsforResult
+    displayName:  UpdateManifestsforResult
+
+
+    steps:
+    - task: ShellScript@2
+
+      inputs:
+        scriptPath: 'scripts/manifestupdatescript.sh'
+        args: 'result $imageRepository $tag'
