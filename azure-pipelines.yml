@@ -1,7 +1,4 @@
 
-
-#---------------------
-
 # Docker
 
 trigger:
@@ -13,7 +10,7 @@ resources:
 - repo: self
 
 variables:
- 
+
   dockerRegistryServiceConnection: '700d9717-406a-49b7-a070-35c833f14d2e'
   imageRepository: 'voteimage'
   containerRegistry: 'votingregistry.azurecr.io'
@@ -27,7 +24,7 @@ stages:
 
 
 - stage: Build
-  displayName: Build 
+  displayName: Build
 
   jobs:
 
@@ -35,6 +32,7 @@ stages:
     displayName: Buildforvoting
 
     steps:
+
     - task: Docker@2
       displayName: Build the image for voting microservice
 
@@ -46,6 +44,8 @@ stages:
         tags: '$(tag)'
 
 
+
+
 - stage: PushtoContainerRegistryforVoting
   displayName: PushtoContainerRegistryforVoting
 
@@ -55,6 +55,7 @@ stages:
     displayName: PushtoContainerRegistryforVoting
 
     steps:
+
     - task: Docker@2
       displayName: Push the image for Voting microservice
 
@@ -63,6 +64,7 @@ stages:
         repository: '$(imageRepository)'
         command: 'push'
         tags: '$(tag)'
+
 
 
 - stage: UpdateManifestsforVoting
@@ -75,14 +77,19 @@ stages:
 
     steps:
 
-    # Checkout repository and keep Azure DevOps credentials
+    # Checkout repository
     - checkout: self
       persistCredentials: true
 
-    # Run manifest update script
+    # Run shell script
     - task: ShellScript@2
       displayName: Update Voting Kubernetes Manifest
+
       inputs:
         scriptPath: 'scripts/mainupdatemanifestscript.sh'
         args: 'vote $(imageRepository) $(tag)'
+
+      env:
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
 
