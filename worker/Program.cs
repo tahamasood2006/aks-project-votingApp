@@ -26,6 +26,7 @@ namespace Worker
                 keepAliveCommand.CommandText = "SELECT 1";
 
                 var definition = new { vote = "", voter_id = "" };
+                // CRAZY HOAGAYA BHAI CRAZY
                 while (true)
                 {
                     // Slow down to prevent CPU spike, only query each 100ms
