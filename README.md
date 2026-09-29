@@ -1,6 +1,6 @@
 # Example Voting App
 
-A simple distributed application running across multiple Docker containers.
+A simple distributed application. Uses Azure DevOps and majorly azure pipelines to manage and ACR . While AKS manages the heavy game 
 
 
 ## Architecture
